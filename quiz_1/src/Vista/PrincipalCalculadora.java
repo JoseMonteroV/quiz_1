@@ -6,14 +6,19 @@
 package Vista;
 
 import Controlador.Controlador_Ventana_Princ;
+import Modelo.Calculadora;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  *
  * @author DELL
  */
 public class PrincipalCalculadora extends javax.swing.JFrame {
-    
-     private Controlador_Ventana_Princ controlador_Ventana_Princ;
+
+    private Controlador_Ventana_Princ controlador_Ventana_Princ;
 
     /**
      * Creates new form calcu
@@ -23,6 +28,7 @@ public class PrincipalCalculadora extends javax.swing.JFrame {
         controlador_Ventana_Princ = new Controlador_Ventana_Princ(this);
         this.jBCalcular.addActionListener(controlador_Ventana_Princ);
         //this.jTImprecion.addActionListener(controlador_Ventana_Princ);
+        jTImprecion.setEditable(false);
     }
 
     /**
@@ -47,6 +53,11 @@ public class PrincipalCalculadora extends javax.swing.JFrame {
         jLabel2.setText("Operacion");
 
         jBCalcular.setText("Calcular");
+        jBCalcular.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBCalcularActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -78,17 +89,21 @@ public class PrincipalCalculadora extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTImprecion, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                .addComponent(jTImprecion, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jBCalcular)
                     .addComponent(jTEntrada, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(19, 19, 19))
+                .addGap(29, 29, 29))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jBCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCalcularActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBCalcularActionPerformed
 
     /**
      * @param args the command line arguments
@@ -125,14 +140,78 @@ public class PrincipalCalculadora extends javax.swing.JFrame {
             }
         });
     }
-    
-    public String getJtEntada() {
-        return this.jTEntrada.toString();
+
+    public String getJtEntrada() {
+        return this.jTEntrada.getText();
     }
 
     public void setJtEntrada(String jtEntrada) {
         this.jTEntrada.setText(jtEntrada);
     }
+
+    public String getJtImprecion() {
+        return this.jTImprecion.toString();
+    }
+
+    public void setJtImprecion(String jTImprecion) {
+        this.jTImprecion.setText(jTImprecion);
+    }
+
+    public void calcuOpe() {
+
+        Calculadora calculadora = new Calculadora();
+
+        Pattern patronSuma = Pattern.compile("(\\d+)\\+(\\d+)");
+
+        Pattern patronResta = Pattern.compile("(\\d+)\\-(\\d+)");
+        Pattern patronDivision = Pattern.compile("(\\d+)\\/(\\d+)");
+        Pattern patronMultiplicacion = Pattern.compile("(\\d+)\\*(\\d+)");
+        Pattern patronIgualdad = Pattern.compile("=");
+        Matcher matcher = patronSuma.matcher(getJtEntrada());
+
+        int resultado = 0;
+        double numero1 = 0;
+        double numero2 = 0;
+
+        //  Este es el proceso para la suma
+        matcher = patronSuma.matcher(getJtEntrada());
+        while (matcher.find()) {
+            numero1 = Integer.parseInt(matcher.group(1));
+            numero2 = Integer.parseInt(matcher.group(2));
+            resultado += numero1 + numero2;
+        }
+        // Este es el proceso para la resta
+        matcher = patronResta.matcher(getJtEntrada());
+        while (matcher.find()) {
+            numero1 = Integer.parseInt(matcher.group(1));
+            numero2 = Integer.parseInt(matcher.group(2));
+            resultado += numero1 - numero2;
+        }
+        // Este es el proceso para la division
+        matcher = patronDivision.matcher(getJtEntrada());
+        while (matcher.find()) {
+            numero1 = Integer.parseInt(matcher.group(1));
+            numero2 = Integer.parseInt(matcher.group(2));
+            resultado += numero1 / numero2;
+        }
+// Este es el proceso para la Multiplicacion
+        matcher = patronMultiplicacion.matcher(getJtEntrada());
+        while (matcher.find()) {
+            numero1 = Integer.parseInt(matcher.group(1));
+            numero2 = Integer.parseInt(matcher.group(2));
+            resultado += numero1 * numero2;
+        }
+        // Este es el proceso para la igualdad
+        matcher = patronIgualdad.matcher(getJtEntrada());
+        if (matcher.find()) {
+            //JOptionPane.showMessageDialog(this, "El Resultado de la operacion es " + resultado);
+            jTImprecion.setText(String.valueOf("El resultado es: " + resultado));
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe de ingresar el simbolo de igual");
+
+        }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBCalcular;

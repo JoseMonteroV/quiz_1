@@ -5,10 +5,19 @@
  */
 package Modelo;
 
+import java.util.regex.Matcher;
+
 /**
  *
  * @author DELL
  */
 public class Calculadora {
-    
+
+    int total = 0;
+
+    public Calculadora() {
+    }
+
+   
+
 }
